@@ -53,12 +53,13 @@ pip install -r requirements.txt
 
 ## 5. Usage (CLI)
 
-The REPL is started from **`src/`** because `main.py` uses **plain imports** (`from crawler import …`), not a package name:
+From the **repository root**, start the REPL with:
 
 ```bash
-cd src
-python main.py
+python src/main.py
 ```
+
+Python puts the directory that contains the entry script (`src/`) on `sys.path`, so the plain imports in `main.py` (`from crawler import …`, etc.) resolve correctly without installing a package.
 
 Then type commands at the `>` prompt (input is normalized to **lowercase** in code, so `Build` and `build` behave the same).
 
@@ -129,7 +130,7 @@ I used an **AI coding assistant** (e.g. Cursor) during parts of this project. Be
 
 **Where the AI was wrong or risky**
 
-- **Run directory:** suggestions often assume `python -m src.main` or a `setup.py` install; this repo expects **`cd src` + `python main.py`**. Running from the repo root breaks imports unless `PYTHONPATH` is set.  
+- **Run command:** some suggestions assume `cd src` + `python main.py` or `python -m src.main`; this repo documents **`python src/main.py` from the repository root** (other variants can fail depending on `sys.path` / package layout).  
 - **DOM assumptions:** any selector for `quotes.toscrape.com` must be checked against **real HTML**; generated selectors can drift if the site template changes.  
 - **Edge cases:** e.g. `print` with multiple tokens — the current `split(" ")[1]` behavior is easy to miss in a quick AI review.
 
