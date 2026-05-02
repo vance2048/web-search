@@ -57,3 +57,25 @@ def save_index(index, filepath="data/index.json"):
         json.dump(index, f, indent=2, ensure_ascii=False)
 
     print(f"Index saved to {filepath}")
+
+
+def load_index(filepath="data/index.json"):
+    """
+    Load inverted index from file system.
+    """
+    if not os.path.exists(filepath):
+        print(f"Index file not found: {filepath}")
+        print("Please run 'build' first.")
+        return None
+
+    try:
+        with open(filepath, "r", encoding="utf-8") as f:
+            index = json.load(f)
+
+        print(f"Index loaded from {filepath}")
+        print(f"Total unique words: {len(index)}")
+        return index
+
+    except json.JSONDecodeError:
+        print("Index file is corrupted or not valid JSON.")
+        return None

@@ -1,10 +1,12 @@
 # src/main.py
 
 from crawler import crawl_site
-from indexer import build_inverted_index, save_index
+from indexer import build_inverted_index, save_index, load_index
 
+index = None
 
 def build():
+    global index
     """
     Build command:
     1. Crawl website
@@ -22,10 +24,27 @@ def build():
     print(f"Total unique words indexed: {len(index)}")
 
 
-if __name__ == "__main__":
-    command = input("> ").strip().lower()
+def load():
+    global index
 
-    if command == "build":
-        build()
-    else:
-        print("Unknown command.")
+    index = load_index()
+
+    if index is not None:
+        print("Load completed successfully.")
+
+if __name__ == "__main__":
+    while True:
+        command = input("> ").strip().lower()
+
+        if command == "build":
+            build()
+
+        elif command == "load":
+            load()
+
+        elif command in ["exit", "quit"]:
+            print("Goodbye.")
+            break
+
+        else:
+            print("Unknown command.")
