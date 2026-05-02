@@ -2,7 +2,7 @@
 
 from crawler import crawl_site
 from indexer import build_inverted_index, save_index, load_index
-from search import print_word
+from search import print_word, find_pages
 
 index = None
 
@@ -46,6 +46,10 @@ if __name__ == "__main__":
         elif command.startswith("print "):
             word = command.split(" ")[1]
             print_word(index, word)
+
+        elif command.lower().startswith("find"):
+            query = command[4:].strip()
+            find_pages(index, query)
 
         elif command in ["exit", "quit"]:
             print("Goodbye.")
