@@ -19,19 +19,19 @@ def find_pages(index, query):
 
     if index is None:
         print("Index not loaded. Please run 'build' or 'load' first.")
-        return
+        return []
 
     query_words = tokenize_query(query)
 
     if not query_words:
         print("Empty query. Please enter at least one search term.")
-        return
+        return []
 
     # 如果某个词不在 index 里，直接无结果
     for word in query_words:
         if word not in index:
             print("No results found.")
-            return
+            return []
 
     # 取每个词出现过的页面集合
     page_sets = []
@@ -45,7 +45,7 @@ def find_pages(index, query):
 
     if not result_pages:
         print("No results found.")
-        return
+        return []
 
     # 简单排序：按所有查询词在页面中的总频率，从高到低
     def score_page(url):
@@ -61,6 +61,8 @@ def find_pages(index, query):
     for url in ranked_pages:
         score = score_page(url)
         print(f"- {url}  (score: {score})")
+    
+    return ranked_pages
         
 def print_word(index, word):
     """
@@ -69,13 +71,13 @@ def print_word(index, word):
 
     if index is None:
         print("Index not loaded. Please run 'build' or 'load' first.")
-        return
+        return []
 
     word = word.lower()
 
     if word not in index:
         print(f"Word '{word}' not found in index.")
-        return
+        return None
 
     print(f"\nInverted index for '{word}':\n")
 
@@ -87,3 +89,5 @@ def print_word(index, word):
         print(f"  Frequency: {freq}")
         print(f"  Positions: {positions}")
         print()
+        
+    return index[word]

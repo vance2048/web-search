@@ -24,7 +24,7 @@ def crawl_site():
         try:
             response = requests.get(next_url, timeout=10)
             response.raise_for_status()
-        except requests.RequestException as e:
+        except Exception as e:
             print(f"Request failed: {e}")
             break
 
