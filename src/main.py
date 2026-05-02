@@ -2,6 +2,7 @@
 
 from crawler import crawl_site
 from indexer import build_inverted_index, save_index, load_index
+from search import print_word
 
 index = None
 
@@ -41,6 +42,10 @@ if __name__ == "__main__":
 
         elif command == "load":
             load()
+
+        elif command.startswith("print "):
+            word = command.split(" ")[1]
+            print_word(index, word)
 
         elif command in ["exit", "quit"]:
             print("Goodbye.")
