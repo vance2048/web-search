@@ -12,6 +12,27 @@ def tokenize(text):
     return re.findall(r"\b\w+\b", text.lower())
 
 
+def _page_to_index_text(page):
+    """
+    Flatten crawler page payload (dict) or legacy plain string for indexing.
+    """
+    if isinstance(page, str):
+        return page
+    parts = [page.get("title") or ""]
+    parts.extend(page.get("top_tags") or [])
+    prof = page.get("author_profile")
+    if prof:
+        parts.append(prof.get("name") or "")
+        parts.append(prof.get("born_date") or "")
+        parts.append(prof.get("born_location") or "")
+        parts.append(prof.get("description") or "")
+    for q in page.get("quotes") or []:
+        parts.append(q.get("text") or "")
+        parts.append(q.get("author") or "")
+        parts.extend(q.get("tags") or [])
+    return " ".join(p for p in parts if p)
+
+
 def build_inverted_index(pages):
     """
     Build inverted index.
@@ -28,7 +49,8 @@ def build_inverted_index(pages):
     """
     index = {}
 
-    for url, text in pages.items():
+    for url, page in pages.items():
+        text = _page_to_index_text(page)
         words = tokenize(text)
 
         for position, word in enumerate(words):
